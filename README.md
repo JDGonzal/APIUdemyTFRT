@@ -19,8 +19,8 @@ Es la respuesta recibida del servidor.
 
 ## Paso 5
 ### ¿Que es un Endpoint?
-Es un sitio llamado URI (Universal Recoruce Identifier), algo parecido a auna URL.
-Debemos verificar si el sitio existe, y rcibimos un 200 (ok) o un error (400 a 509).
+Es un sitio llamado URI (Universal Recoruce Identifier), algo parecido a a una URL.
+Debemos verificar si el sitio existe, y recibimos un 200 (ok) o un error (400 a 509).
 Dependiendo de lo pedido vamos a secciones o subsecciones.
 
 ## Paso 6
@@ -52,15 +52,50 @@ Si necesito que el usuario está bloqueado sería por API.
 1. Abriendo el VSC totalmente en blanco, a la izquierda al medio
  aparece un botón llamado `Create Java Project`, allí le damos
   click.
-2. Seleccionamos en la parte superior al centro, la opcipon de `Gradle`.
-3. Buscamos la ruta donde lo vamos a crear (En mi caso tengo una carpeta de 
-"E:\Development\tutorials\java\cucumber\".
-4. Tengo una carpeta allí como el nombre del proyecto "APIUdemi".
+2. Seleccionamos en la parte superior al centro, la opción de `Gradle`.
+3. Buscamos la ruta donde lo vamos a crear (En mi caso tengo una carpeta 
+de "E:\Development\tutorials\java\cucumber\".
+4. Crear una carpeta allí como el nombre del proyecto "APIUdemi".
 5. Seleccionamos el `DSL` que es `Groovy`.
 6. El nombre del proyecto será `APIUdemy`.
-7. Sacamos de la carpeta "app" el directorio "src" yel archivo
- **build.gradle** a la raíz del proyecto
+7. Sacamos de la carpeta "app" el directorio "src" y el archivo
+ **build.gradle** a la raíz del proyecto.
 8. La carpeta "app" se puede eliminar. 
 9. Dentro de "src/test" verificamos que estén las carpetas:
 * "java"
 * "resources"
+## Paso 09
+1. Modificamos el **build.gradle**
+```gradle
+plugins {
+    id 'java'
+}
+
+group 'TheFreeRangeTester'
+version '1.0.SNAPSHOT'
+
+sourceCompatibility = 1.11
+
+repositories {
+    // Use Maven Central for resolving dependencies.
+    mavenCentral()
+}
+
+dependencies {
+
+}
+```
+2. Añadimos estas dependencias:
+* [REST Assured](https://mvnrepository.com/artifact/io.rest-assured/rest-assured).
+* [Cucumber JVM: Java](https://mvnrepository.com/artifact/io.cucumber/cucumber-java).
+3. Borramos la carpeta "main", dentro de "scr"
+4. Borramos en el archivo **settings.gradle**, la linea de
+`include('app')`.
+5. Borramos la carpeta "apiudemy" dentro de "src/test/java".
+>[!TIP]  
+> Muchas veces añadir dependencias requiere que se ejecute la limpieza
+> del ambiente de dos maneras:
+> * Presionar las teclas [Ctrl][Shift][P], y seleccionar
+> `Java: Clean Java Language Server Workspace`, o
+> * En el Menú inferior izquierdo, seleccionar `JAVA PROJECT`, 
+>luego los puntos suspensivos y ahí está `Clean Workspace`.

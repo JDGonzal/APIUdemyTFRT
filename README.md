@@ -99,3 +99,46 @@ dependencies {
 > `Java: Clean Java Language Server Workspace`, o
 > * En el Menú inferior izquierdo, seleccionar `JAVA PROJECT`, 
 >luego los puntos suspensivos y ahí está `Clean Workspace`.
+
+## Paso 10
+>[!TIP]  
+> Ante un mensaje de que si se hace build, le activé el botón de "Always"
+>(Siempre) y el creó un archivo en ".vscode" llamado **settings.json**
+> con estas líneas:
+>```json
+>{
+>  "java.configuration.updateBuildConfiguration": "automatic"
+>}
+>```
+
+## Paso 11
+> [!IMPORTANT]  
+> Las versiones de "Cucumber JVM: Java" y "Cucumber JVM: JUnit 4",
+> **TIENEN** que ser iguales.
+1. Agrego otra dependencia de [Cucumber JVM: JUnit 4](https://mvnrepository.com/artifact/io.cucumber/cucumber-junit) 
+ene el archivo **build.gradle**.
+2. Se requiere para los `ExtentReports` añadir en **build.gradle** otra
+dependencia [ExtentReports Cucumber7 Adapter](https://mvnrepository.com/artifact/tech.grasshopper/extentreports-cucumber7-adapter).
+3. Para el manejo de `json` agregamos otra dependencia en **build.gradle**
+[JSON In Java](https://mvnrepository.com/artifact/org.json/json)
+
+>[!TIP]  
+> Muchas veces añadir dependencias requiere que se ejecute la limpieza
+> del ambiente de dos maneras:
+> * Presionar las teclas [Ctrl][Shift][P], y seleccionar
+> `Java: Clean Java Language Server Workspace`, o
+> * En el Menú inferior izquierdo, seleccionar `JAVA PROJECT`, 
+>luego los puntos suspensivos y ahí está `Clean Workspace`.
+
+4. Verificar que se tengan estas rutas o de ser necesario crearlas:
+* "src/test/java"
+* "src/test/resources/features"
+5. Crear el archivo **APITest.feature** dentro de 
+"src/test/resources/features", con el siguiente texto:
+```feature
+Feature: Request example for Udemy
+
+Scenario: Test GET to endpoint.
+  Given I send a GET request to the endpoint
+  Then I get a list of then users
+```

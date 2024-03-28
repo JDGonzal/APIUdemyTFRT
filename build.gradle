@@ -16,7 +16,14 @@ dependencies {
 
     // https://mvnrepository.com/artifact/io.rest-assured/rest-assured
     testImplementation group: 'io.rest-assured', name: 'rest-assured', version: '5.4.0'
+    // Se requiere una versión "Hermana" de junit igual q la version de cucumber
     // https://mvnrepository.com/artifact/io.cucumber/cucumber-java
     implementation group: 'io.cucumber', name: 'cucumber-java', version: '7.16.1'
+    // https://mvnrepository.com/artifact/io.cucumber/cucumber-junit
+    testImplementation group: 'io.cucumber', name: 'cucumber-junit', version: '7.16.1'
+    // https://mvnrepository.com/artifact/tech.grasshopper/extentreports-cucumber7-adapter
+    implementation group: 'tech.grasshopper', name: 'extentreports-cucumber7-adapter', version: '1.14.0'
+    // https://mvnrepository.com/artifact/org.json/json
+    implementation group: 'org.json', name: 'json', version: '20240303'
 
 }

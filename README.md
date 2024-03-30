@@ -55,7 +55,7 @@ Si necesito que el usuario está bloqueado sería por API.
 2. Seleccionamos en la parte superior al centro, la opción de `Gradle`.
 3. Buscamos la ruta donde lo vamos a crear (En mi caso tengo una carpeta 
 de "E:\Development\tutorials\java\cucumber\".
-4. Crear una carpeta allí como el nombre del proyecto "APIUdemi".
+4. Crear una carpeta allí como el nombre del proyecto "APIUdemy".
 5. Seleccionamos el `DSL` que es `Groovy`.
 6. El nombre del proyecto será `APIUdemy`.
 7. Sacamos de la carpeta "app" el directorio "src" y el archivo
@@ -142,3 +142,38 @@ Scenario: Test GET to endpoint.
   Given I send a GET request to the endpoint
   Then I get a list of then users
 ```
+
+## Paso 12
+1. Agrego mas dependencias [Groovy All](https://mvnrepository.com/artifact/org.codehaus.groovy/groovy-all).
+2. Otra dependencia para los repoerrtes [JUnit-bom 5 (Bill of Materials)](https://mvnrepository.com/artifact/org.junit/junit-bom).
+3. Otra dependencia mas [JUnit Jupiter (Aggregator)](https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter).
+4. Crear dos carpetas mas:
+* "src/test/java/runner".
+* "src/test/java/steps".
+5. Creamos el archivo **Runner.java** en "src/test/java/runner", con lo 
+básico:
+```java
+package runner;
+
+public class Runner {
+  
+}
+```
+>[!IMPORTANT]  
+> Las clase **Runner.java**, es la encargada de ejecutar los escenarios o
+> los archivos ***.feature**, el la q se encargada de unir las definiciones 
+>de los **steps** con los **feature**.
+
+6. Colocamos un `@RunWith` en **Runner.java**, con la herramienta con que
+se va a realizar la ejecuciones `(Cucumber.class)` (ojo que no lleva 
+punto y coma `;`), por ende se debe importar: 
+`import io.cucumber.junit.Cucumber;` e `import org.junit.runner.RunWith;`.
+7. Ponemos las `@CucumberOptions` y anexamos una lista de valores:
+```java
+@CucumberOptions(features = "src/test/resources/features",
+    glue = "steps")
+```
+Así me debe aparecer la clase **Runner.java** con un triángulo o círculo
+en la columna izquierda del código (En la imagen es la línea 12):  
+![Runner.java](images/section02-step_12-Runner_java.png)
+

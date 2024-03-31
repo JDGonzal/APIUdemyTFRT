@@ -265,3 +265,73 @@ expresión regular, y por ende el método debe requerir un argumento:
 zona izquierda del código y esperamos el resultado, algo similar a esto:  
 ![TEST RESULTS-13](images/section02-step_13-TestResults.png)
 
+# Section 3: Tipos de request y respuestas.
+## Paso 14. Rest Assured: El GET request y sus componentes.
+
+>![NOTE]  
+> Aprendiendo la sintaxis de `RestAssured`, importando 
+>`import static io.restassured.RestAssured.given;` y usándolo. La 
+>Sintaxis es muy similar a la de Cucumber usando el lenguaje 
+>[_Gherkin_](https://profile.es/blog/que-es-gherkin/).  
+>
+>En el Ejercicio se recominda instalar la extensión para VSC, llamada
+>`Thunder Client` de `thunderclient.com`.
+> 1. Luego de instalada, click en el ícono a la izquierda 
+>![ThunderIcon](images/section03-step_14-ThunderIcon.png).
+>2. Presionar el botón "New Request".
+>3. Por defecto el tipo  es `GET`, dejarlo así.
+>4. Colocar esto en la URI: `https://api.github.com/users/jdgonzal/repos`.
+>5. Presionar el botón `Send`.
+>6. Revisar el resultado obtenido.
+
+## Paso 15. Rest Assured: El POST request y sus componentes.
+
+## Paso 16. Rest Assured: El PUT request y sus componentes.
+
+## Paso 17. Rest Assured: El DELETE request y sus componentes.
+
+## Paso 18. Rest Assured: La response y sus componentes.
+>[!NOTE]  
+> Ejemplo de un JSON q mas adelante podremos estar utilizando:
+>```json
+>[
+>  {
+>    "empleado": {
+>      "nombre": "Juan",
+>      "appelido": "Lopez",
+>      "web": "misitio.com"
+>    }
+>  },
+>  {
+>    "empleado": {
+>      "nombre": "Carlos",
+>      "appelido": "Gardel",
+>      "web": "miotrositio.com"
+>    }
+>  }
+>]
+>```
+
+## Paso 19. Requests REST y SOAP: ¿Cómo se hacen?
+>[!TIP]  
+> Este es un ejemplo de un request del tipo `SOAP`, usando 
+>`RestAssured`:
+>```java
+>  public void SOAPRequest(){
+>    String xmlEnvelope = "<soap12: Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" "
+>    "xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap12=\"http://www.w3.org/2003/05/soap-envelope\">"
+>    "<soap12:Body>" +
+>    "<Define xmlns=\"http://services.aonaware.com/webservices/\">" +
+>    "<word></word>" +
+>    "</Define>" +
+>    "</soap12:Body>" + 
+>    "</soap12:Envelope>";
+>
+>      given()
+>      .header("SOAPAction", "Define")
+>      .baseUri("https://api.blogEjemplo.com")
+>      .when()
+>      .body(xmlEnvelope)
+>      .post("/endpoint");
+>    }
+>```

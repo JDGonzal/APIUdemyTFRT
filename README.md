@@ -177,3 +177,91 @@ Así me debe aparecer la clase **Runner.java** con un triángulo o círculo
 en la columna izquierda del código (En la imagen es la línea 12):  
 ![Runner.java](images/section02-step_12-Runner_java.png)
 
+## Paso 13
+1. Crear un archivo **APISteps.java** en "src/test/java/steps".
+2. Verificamos los pasos y se corrigen de ser necesario en 
+**APITest.feature**:
+```feature
+Feature: Request example for Udemy
+
+Scenario: Test GET to endpoint.
+  Given I send a GET request to the endpoint
+  Then I get a list with 10 users
+```
+3. Tomamos del **APITest.feature**, los pasos: `Given` y `Then`, para copiarlos en  **APISteps.java** y les hacemos unos ajustes:
+```java
+package steps;
+
+public class APISteps {
+
+  @Given ("I send a GET request to the endpoint")
+  @Then ("I get a list with 10 users")
+  
+}
+```
+4. Colocamos métodos debajo de cada recien `@Given` y `@Then`, mas
+las importaciones faltantes:
+```java
+package steps;
+
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+
+public class APISteps {
+
+  @Given ("I send a GET request to the endpoint")
+  public void sendGETRequest(){
+
+  }
+  @Then ("I get a list with 10 users")
+  public void validateListOfUsers(){
+    
+  }
+  
+}
+```
+5. Mejoramos la importación con este: `import io.cucumber.java.en.*;`, 
+Los anteriores los podemos borrar o comentar.
+6. Los pasos q copiamos de **APITest.feature**, los mejoramos en 
+**APISteps.java**, con el _caret_(`^`) y el _signo pesos_(`$`). 
+7. el paso del `@Then`, le cambiamos el valor _fijo_ de `10`, por una
+expresión regular, y por ende el método debe requerir un argumento:
+```java
+  @Then("^I get a list with (\\d+) users$")
+  public void validateListOfUsers(int expectedUserSize){
+    
+  }
+```
+>[!CAUTION]  
+> Debo corregir el **build.gradle** en la zona de `dependencies`:
+>```gradle
+>dependencies {
+>    // https://mvnrepository.com/artifact/io.rest-assured/rest-assured
+>    testImplementation group: 'io.rest-assured', name: 'rest-assured', version: '5.4.0'
+>    // Se requiere una versión "Hermana" de junit igual q la version de cucumber
+>    // https://mvnrepository.com/artifact/io.cucumber/cucumber-java
+>    implementation group: 'io.cucumber', name: 'cucumber-java', version: '7.16.1'
+>    // https://mvnrepository.com/artifact/io.cucumber/cucumber-junit
+>    testImplementation group: 'io.cucumber', name: 'cucumber-junit', version: '7.16.1'
+>    // https://mvnrepository.com/artifact/tech.grasshopper/extentreports-cucumber7-adapter
+>    implementation group: 'tech.grasshopper', name: 'extentreports-cucumber7-adapter', version: '1.14.0'
+>    // https://mvnrepository.com/artifact/org.json/json
+>    implementation group: 'org.json', name: 'json', version: '20240303'
+>    // https://mvnrepository.com/artifact/org.codehaus.groovy/groovy-all
+>
+>    // https://mvnrepository.com/artifact/org.junit/junit-bom
+>    testImplementation (platform('org.junit:junit-bom:5.10.2'))
+>    // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter
+>    testImplementation ('org.junit.jupiter:junit-jupiter')
+>}
+>```
+> Y ejecutar la limpieza del ambiente:
+> * o Presionar las teclas [Ctrl][Shift][P], y seleccionar
+> `Java: Clean Java Language Server Workspace`, o
+> * o En el Menú inferior izquierdo, seleccionar `JAVA PROJECT`, 
+>luego los puntos suspensivos y ahí está `Clean Workspace`.
+
+8. Desde el **Runner.java**, presionamos el triángulo o círculo en la
+zona izquierda del código y esperamos el resultado, algo similar a esto:  
+![TEST RESULTS-13](images/section02-step_13-TestResults.png)
+

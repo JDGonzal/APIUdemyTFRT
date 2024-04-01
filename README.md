@@ -259,8 +259,9 @@ zona izquierda del código y esperamos el resultado, algo similar a esto:
 > Aprendiendo la sintaxis de `RestAssured`, importando 
 >`import static io.restassured.RestAssured.given;` y usándolo. La 
 >Sintaxis es muy similar a la de Cucumber usando el lenguaje 
->[_Gherkin_](https://profile.es/blog/que-es-gherkin/).  
->
+>[_Gherkin_](https://profile.es/blog/que-es-gherkin/). 
+> 
+><a name="Thunder-Client-Install"></a>
 >En el Ejercicio se recominda instalar la extensión para VSC, llamada
 >`Thunder Client` de `thunderclient.com`.
 > 1. Luego de instalada, click en el ícono a la izquierda 
@@ -452,3 +453,59 @@ zona izquierda del código y esperamos el resultado, algo similar a esto:
 >  .statusCode(200);
 >}
 >```
+
+## Paso 24. Thunder Client: La extensión definitiva para explorar APIs en VSCode.
+>[!NOTE]  
+> Opciones para entender la extensión:
+>* [Thunder Client - Postman dentro de Visual Studio Code](https://www.youtube.com/watch?v=HZx5X3s_Jl4).
+>* [Que Es, Como Funciona Thunder Client](https://www.youtube.com/watch?v=Ad14nNSENz4).
+>
+>[Pasos para la instalación de Thunder Client](#Thunder-Client-Install)
+
+# Section 4: Step Definitions y Rest Assured.
+
+## Paso 25. Definiendo los steps creados.
+1. Cambió del texto en **APITest.feature** de 
+`Then I get a list with 10 users` a `Then I get a 200 status code`
+2. debo cambiar ese mismo texto en **APISteps.java**, dejando algo así:
+`@Then("^I get a (\\d+) status code$")`.
+3. Definimos una variable `request` de tipo `RequestSpecification`,
+por ende importamos `import io.restassured.specification.RequestSpecification;`.
+4. Importamos de manera especial lo de `RestAssured`, empezando con el 
+`given`, así: `import static io.restassured.RestAssured.given;`.
+4. La variable `request`, le cargamos el valor del `given` e importamos
+lo faltante `import io.restassured.http.ContentType`:
+```java
+  @Given("^I send a GET request to the endpoint$")
+  public void sendGETRequest() {
+    request = given()
+              .baseUri("https://api.github.com")
+              .contentType(ContentType.JSON);
+  }
+```
+5. Añadimos la variable `response` de tipo `Response` e importamos
+`import io.restassured.response.Response;`.
+```java
+  @Then("^I get a (\\d+) status code$")
+  public void validateListOfUsers(int expectedStatusCode) {
+    response = request.when()
+              .get("/users/jdgonzal/repos");  // Acá va el endpoint
+   
+    json = response.then().statusCode(expectedStatusCode);
+  }
+```
+6. Definimos la variable `json` de tipo `ValidatableResponse`, e
+importamos `import io.restassured.response.ValidatableResponse;`.
+7. Ajustamos el **Runer.java** en la parte de `@CucumberOptions`, así:
+```java
+@CucumberOptions(features = "src/test/resources/features",
+    glue = "steps",
+    // plugin ={"pretty",
+    //   "com.aventstack.extentreports.cucumber.adapter.ExtentCucumberAdapter:",
+    //   "timeline:test-output-thread/"},
+    tags = "@API"
+)
+```
+8. Podemos correr desde **Runner.java** y vemos el resultado, sin errores.
+9. Provoquemos un error cambiando en **APITest.feature** el `200` por el 
+`400` y volvemos a correr desde **Runner.java**.

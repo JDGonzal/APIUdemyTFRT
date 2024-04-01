@@ -1,41 +1,34 @@
 # Curso de : Automation Tester Avanzado: REST Assured, Cucumber y Groovy
 https://udemy.com/course/api-test-automation-los-dos-frameworks-esenciales-a-fondo/
 # Section 1: Introducción
-## Paso 1
+## Paso 1. Introducción
 Introducción
 
-## Paso 2
-### ¿Qué es una API?
+## Paso 2. ¿Qué es una API?
 Es una interfase, los usuarios son herramientas q requieren hacer pedidos.
 es hecha para programas no para seres humanos.
 
-## Paso 3
-### ¿Qué es un request?
+## Paso 3. ¿Qué es un request?
 Es un pedido hecho a un servidor, que estamos esperando como respuesta.
 
-## Paso 4
-### ¿Qué es un Response?
+## Paso 4. ¿Qué es un Response?
 Es la respuesta recibida del servidor.
 
-## Paso 5
-### ¿Que es un Endpoint?
+## Paso 5. ¿Que es un Endpoint?
 Es un sitio llamado URI (Universal Recoruce Identifier), algo parecido a a una URL.
 Debemos verificar si el sitio existe, y recibimos un 200 (ok) o un error (400 a 509).
 Dependiendo de lo pedido vamos a secciones o subsecciones.
 
-## Paso 6
-### ¿Qué es API Testing y por qué es tan importante?
+## Paso 6. ¿Qué es API Testing y por qué es tan importante?
 Rara vez cambia el API, es mas proclive para hacer pruebas mas estables.
 ![Piramide de Test](images/section01-step-06-PiramidTest.png)
 
-## Paso 7
-### El viejo debate: Automation de UI vs. API ¿Cuál hacer y por qué?
+## Paso 7. El viejo debate: Automation de UI vs. API ¿Cuál hacer y por qué?
 Verificar que el botón funciona es con UI.
 Si necesito que el usuario está bloqueado sería por API.
 
 # Section 2: Presentando las herramientas que vamos a usar y su configuración.
-## Paso 8
-### Presentación del VSCode y creación de directorios y proyecto
+## Paso 8. Presentación del VSCode y creación de directorios y proyecto
 >[!NOTE]  
 >**Requerimientos**
 >* [Visual Studio Code](https://code.visualstudio.com/download) 
@@ -64,7 +57,7 @@ de "E:\Development\tutorials\java\cucumber\".
 9. Dentro de "src/test" verificamos que estén las carpetas:
 * "java"
 * "resources"
-## Paso 09
+## Paso 9. Agregando las dependencias clave: Cucumber y Rest Assured.
 1. Modificamos el **build.gradle**
 ```gradle
 plugins {
@@ -92,6 +85,8 @@ dependencies {
 4. Borramos en el archivo **settings.gradle**, la linea de
 `include('app')`.
 5. Borramos la carpeta "apiudemy" dentro de "src/test/java".
+<a name="Tip-Clean-Workspace"></a>
+
 >[!TIP]  
 > Muchas veces añadir dependencias requiere que se ejecute la limpieza
 > del ambiente de dos maneras:
@@ -100,7 +95,7 @@ dependencies {
 > * En el Menú inferior izquierdo, seleccionar `JAVA PROJECT`, 
 >luego los puntos suspensivos y ahí está `Clean Workspace`.
 
-## Paso 10
+## Paso 10. Rest Assured: El estandarte para API testing en Java.
 >[!TIP]  
 > Ante un mensaje de que si se hace build, le activé el botón de "Always"
 >(Siempre) y el creó un archivo en ".vscode" llamado **settings.json**
@@ -111,7 +106,7 @@ dependencies {
 >}
 >```
 
-## Paso 11
+## Paso 11. Cucumber: Haciendo fácil de entender lo complejo de las APIs.
 > [!IMPORTANT]  
 > Las versiones de "Cucumber JVM: Java" y "Cucumber JVM: JUnit 4",
 > **TIENEN** que ser iguales.
@@ -123,12 +118,7 @@ dependencia [ExtentReports Cucumber7 Adapter](https://mvnrepository.com/artifact
 [JSON In Java](https://mvnrepository.com/artifact/org.json/json)
 
 >[!TIP]  
-> Muchas veces añadir dependencias requiere que se ejecute la limpieza
-> del ambiente de dos maneras:
-> * Presionar las teclas [Ctrl][Shift][P], y seleccionar
-> `Java: Clean Java Language Server Workspace`, o
-> * En el Menú inferior izquierdo, seleccionar `JAVA PROJECT`, 
->luego los puntos suspensivos y ahí está `Clean Workspace`.
+> [Pasos para Limpiar ambiente luego de añadir dependencias](#Tip-Clean-Workspace).
 
 4. Verificar que se tengan estas rutas o de ser necesario crearlas:
 * "src/test/java"
@@ -143,7 +133,7 @@ Scenario: Test GET to endpoint.
   Then I get a list of then users
 ```
 
-## Paso 12
+## Paso 12. Clase Runner: Lo necesario para ejecutar nuestros scenarios de Cucumber.
 1. Agrego mas dependencias [Groovy All](https://mvnrepository.com/artifact/org.codehaus.groovy/groovy-all).
 2. Otra dependencia para los repoerrtes [JUnit-bom 5 (Bill of Materials)](https://mvnrepository.com/artifact/org.junit/junit-bom).
 3. Otra dependencia mas [JUnit Jupiter (Aggregator)](https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter).
@@ -177,7 +167,7 @@ Así me debe aparecer la clase **Runner.java** con un triángulo o círculo
 en la columna izquierda del código (En la imagen es la línea 12):  
 ![Runner.java](images/section02-step_12-Runner_java.png)
 
-## Paso 13
+## Paso 13. Step Definitions en Cucumber: Cómo implementar la lógica.
 1. Crear un archivo **APISteps.java** en "src/test/java/steps".
 2. Verificamos los pasos y se corrigen de ser necesario en 
 **APITest.feature**:
@@ -255,11 +245,8 @@ expresión regular, y por ende el método debe requerir un argumento:
 >    testImplementation ('org.junit.jupiter:junit-jupiter')
 >}
 >```
-> Y ejecutar la limpieza del ambiente:
-> * o Presionar las teclas [Ctrl][Shift][P], y seleccionar
-> `Java: Clean Java Language Server Workspace`, o
-> * o En el Menú inferior izquierdo, seleccionar `JAVA PROJECT`, 
->luego los puntos suspensivos y ahí está `Clean Workspace`.
+> 
+> [Pasos para Limpiar ambiente luego de añadir dependencias](#Tip-Clean-Workspace).
 
 8. Desde el **Runner.java**, presionamos el triángulo o círculo en la
 zona izquierda del código y esperamos el resultado, algo similar a esto:  
@@ -334,4 +321,134 @@ zona izquierda del código y esperamos el resultado, algo similar a esto:
 >      .body(xmlEnvelope)
 >      .post("/endpoint");
 >    }
+>```
+
+## Paso 20. Autenticación Básica en Rest Assured: ¿Cómo se hace?
+>[!NOTE]  
+>Ejemplo de autenticación básica:
+>```java
+>public void basicAuth (String userName, String password) {
+>  given()
+>  .auth().basic(userName, password)
+>  .when()
+>  .get("AUTH_ENDPOΙΝΤ")
+>  .then()
+>  .assertThat().statusCode(200);
+>}
+>```
+
+## Paso 21. Autenticación via formulario en Rest Assured: ¿Cómo se hace?
+>[!NOTE]  
+>Ejemplo de autenticación por formulario:
+>```java
+>public void formAuth (String userName, String password) {
+>  given()
+>  .auth().form(userName, password)
+>  .when()
+>  .get("SERVICE")
+>  .then()
+>  .assertThat().statusCode(200);
+>}
+>```
+
+## Paso 22. Autenticación OAuth en Rest Assured: ¿Cómo obtener el Token para autenticar?
+>[!NOTE]  
+>Obtenemos el permiso de otro servicio q nos va a autenticar para 
+>alcanzar la solicitud del request.
+>1. Obtener el código del servicio original, para conseguir el 
+>`token`.
+>2. Obtener el `token`, intercambiando el código q conseguimos.
+>3. Acceder al recurso protegido, con nuestro `token`.
+>
+>Ejemplo de código:
+>```java
+>public static String clientId = "";
+>public static String redirectUri = "";
+>public static String scope = "";
+>public static String userName = "";
+>public static String password = "";
+>public static String grantType = "";
+>
+>public static String encode(String str1, String str2){
+>  return new String (Base64getEncoder().encode((str1 + ":" + str2).getBytes()));
+>}
+>
+>// 1. Obtener el código del servicio original, para conseguir el `token`.
+>public static Response getCode(){
+>  String authorization = encode(userName, password);
+>
+> return given()
+>    .header("authorization", "Basic" + authorization)
+>    .contentType(ContenType.URLENC)
+>    .formParam("response_type", "code")
+>    .queryParam("client_id", clientId)
+>    .queryParam("redicrect_uri", redicrectUri)
+>    .queryParam("scope", scope)
+>    .post("/oauth/authorize")
+>    .then()
+>    .statusCode(200)
+>    .extract()
+>    .response();
+>}
+>
+>// 2. Obtener el `token`, intercambiando el código q conseguimos.
+>public static String parseForOAuthCode(Response response){
+>  return response.jsonPath().getStringh("code")
+>}
+>
+>// 3. Acceder al recurso protegido, con nuestro `token`.
+>public static Response getToken(String authCode){
+>  String authorization = encode(userNAme, password);
+>
+>  return given()
+>    .header("authorization", "Basic" + authorization)
+>    .contentType(ContenType.URLENC)
+>    .formParam("response_type", authCode)
+>//    .queryParam("client_id", clientId)
+>    .queryParam("redicrect_uri", redicrectUri)
+>    .queryParam("grant_type", grantType)
+>    .post("/oauth/token")
+>    .then()
+>    .statusCode(200)
+>    .extract()
+>    .response();
+>}
+>
+>public static String parseForToken(Response loginResponse){
+>  return loginResponse.jsonPath().getString("access_token");
+>}
+>
+>```
+
+## Paso 23. Autenticación OAuth: Usando el Token y ahondando en lo que hicimos.
+>[!NOTE]  
+> Creamos otra función o método mas:
+>```java
+>// Otra variable mas arriba
+>public static String accessToken = "";
+>
+>public void getFinalService(){
+>  given().auth()
+>  .oauth2(accessToken)
+>  .when()
+>  .get("/service")
+>  .then()
+>  .statusCode(200);
+>}
+>```
+> Una explicación mas detallada:
+>* **Response Type**: Es el código de autorización esperado.  
+>* **Grant Type**: La manera en q la app esta obteneindo el `token`.
+>* **Redirect Uri**: la nueva ruta q nos van a direccionar. Pero acá 
+> mas q la ruta es el conseguir el dato a trabajar.
+>* El Token se puede pasar como un _Header_, como el siguiente ejemplo:
+>```java
+>public void getFinalService(){
+>  given().auth()
+>  .header("Authorization", "Bearer " + accessToken)
+>  .when()
+>  .get("/service")
+>  .then()
+>  .statusCode(200);
+>}
 >```

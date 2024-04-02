@@ -262,7 +262,9 @@ zona izquierda del código y esperamos el resultado, algo similar a esto:
 >[_Gherkin_](https://profile.es/blog/que-es-gherkin/). 
 > 
 ><a name="Thunder-Client-Install"></a>
->En el Ejercicio se recominda instalar la extensión para VSC, llamada
+>
+>### Extensión `Thunder Client`
+>En el Ejercicio se recomienda instalar la extensión para VSC, llamada
 >`Thunder Client` de `thunderclient.com`.
 > 1. Luego de instalada, click en el ícono a la izquierda 
 >![ThunderIcon](images/section03-step_14-ThunderIcon.png).
@@ -509,3 +511,70 @@ importamos `import io.restassured.response.ValidatableResponse;`.
 8. Podemos correr desde **Runner.java** y vemos el resultado, sin errores.
 9. Provoquemos un error cambiando en **APITest.feature** el `200` por el 
 `400` y volvemos a correr desde **Runner.java**.
+
+## Paso 26. Estructura de los steps con Rest Assured: Static y Private, ¿por qué?
+>[!NOTE]  
+> El porque `import static io.restassured.RestAssured.given;` y
+>`private static RequestSpecification request;` en el archivo
+>**APISteps.java**, así te permite utilizar directamente el `given()`, 
+sin crear la instancia, se llama _Método de una clase_.
+
+## Paso 27. Tipos de HTTP Codes y sus significados.
+>[!NOTE]  
+> Lista de respuestas esperadas :[Respuestas HTTP](https://developer.mozilla.org/es/docs/Web/HTTP/Status).  
+>![HTTP Status Codes](images/section04-step27-HTTPStatusCode.jpg).
+
+## Paso 28. Validar la cantidad de recursos recibidos en el JSON.
+1. Cambiamos en **APISteps.java** el `@Given` a esto:
+`@Given("^I send a GET request to the (.+) URI$")`.
+2. Por ende ya recibimos un argumento en el método `sendGETRequest`, 
+de tipo `String`, llamado `URI`.
+3. El argumento lo usamos en `.baseUri(URI)`.
+4. Y cambiamos el texto enviado en **APITest.feature**, así:  
+`Given I send a GET request to the https://api.github.com URI`.
+5. Creamos un nuevo `Scenario` en **APITest.feature**:
+```feature
+Scenario: Validate the quantity of elements in the response. 
+  Given I send a GET request to the https://jsonplaceholder.typicode.com URI
+  Then I validate there are 10 items on the /users endpoint
+```
+6. Añadimos en **APISteps.java** el paso faltante del `@Then`, con dos
+argumentos, dado q eso leemos del ***.feature**:
+```java
+  @Then("^I validate there are (\\d+) items on the (.+) endpoint$")
+  public void validateSize(int expectedSize, String endpoint) {
+}
+```
+>[!TIP]  
+> Los argumentos se **TIENEN** q poner en el orden que está en el 
+>texto, en este caso primero el `int` y luego el `String`.
+
+7. Cargamos el `response` y nos llevamos la lista a una  nueva variable
+ llamada `jsonResponse` de tipo `List<String>` e importamos 
+ `import java.util.List;`:
+```java
+    response = request.when()
+        .get(endpoint);
+
+    List<String> jsonResponse = response.jsonPath().getList("$");
+```
+8. Llevamos el tamaño o cantidad a una variable de tipo `int` llamada
+`actualSize`, de esta manera: `int actualSize = jsonResponse.size();`.
+9. Si hacemos la importación de tipo `static`, obtenemos solo la parte
+de `AssertEquals` de esta manera: `import static org.junit.Assert.assertEquals;`
+, y este sería el método completo:
+```java
+  @Then("^I validate there are (\\d+) items on the (.+) endpoint$")
+  public void validateSize(int expectedSize, String endpoint) {
+    response = request.when()
+        .get(endpoint);
+    // Obtenemos toda la lista del JSON
+    List<String> jsonResponse = response.jsonPath().getList("$");
+    // Cargamos el valor actual
+    int actualSize = jsonResponse.size();
+    // Comparamos el valor esperado con el actual
+    assertEquals(expectedSize, actualSize);
+  }
+```
+10. Movemos el tag de **APITest.feature** al nuevo `Scenario`.
+11. Corremos desde **Runner.java** y vemos el resultado, sin errores.

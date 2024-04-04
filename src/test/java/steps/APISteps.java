@@ -11,6 +11,7 @@ import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;
 import static io.restassured.RestAssured.given;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class APISteps {
 
@@ -44,6 +45,18 @@ public class APISteps {
     int actualSize = jsonResponse.size();
     // Comparamos el valor esperado con el actual
     assertEquals(expectedSize, actualSize);
+  }
+
+  @Then("^I validate there is a (.+): (.+) in the response at (.+) endpoint$")
+  public void validateValue(String key, String value, String endpoint) {
+    response = request.when()
+        .get(endpoint);
+    // Obtenemos toda la lista del JSON
+    List<String> jsonResponse = response.jsonPath().getList(key);
+    // System.out.println(jsonResponse);
+
+    assertTrue("The " + key + " with value:" + value + " was not found.",
+        jsonResponse.contains(value));
   }
 
 }

@@ -578,3 +578,42 @@ de `AssertEquals` de esta manera: `import static org.junit.Assert.assertEquals;`
 ```
 10. Movemos el tag de **APITest.feature** al nuevo `Scenario`.
 11. Corremos desde **Runner.java** y vemos el resultado, sin errores.
+
+## Paso 29. Obtener un valor específico del Response.
+1. Añadir otro `Scenario` en **APITest,feature**, y le movemos el tag solo 
+a este nuevo:
+```feature
+@API
+Scenario: Validate an element exist in the response.
+  Given I send a GET request to the https://jsonplaceholder.typicode.com URI
+  Then I validate there is a username: Bret in the response at /users endpoint
+```
+2. Definimos el Step en **APISteps.java**, para el nuevo `@Then`:
+```java
+  @Then("^I validate there is a (.+): (.+) in the response at (.+) endpoint$")
+  public void validateValue(String key, String value, String endpoint) {
+    response = request.when()
+        .get(endpoint);
+    // Obtenemos toda la lista del JSON
+    List<String> jsonResponse = response.jsonPath().getList(key);
+
+    assertTrue(jsonResponse.contains(value));
+  }
+```
+>[!TIP]  
+> Tambien importamos `import static org.junit.Assert.assertTrue;` en
+> **APISteps.java**.
+
+3. Podemos mejorar el `assertTrue` poniendo un mensaje si hay un error
+al momento de validar, dejando algo así:
+```java
+    assertTrue("The " + key + " with value:" + value + " was not found.",
+        jsonResponse.contains(value));
+```
+4. Para probarlos cambiemos en **APITest.feature** esta linea:
+`Then I validate there is a username: Bret in the response at /users endpoint`  
+por esta otra `Then I validate there is a username: Carlos in the response at /users endpoint`.
+5. Podemos correr desde **Runner.java** y vemos el resultado con el error.
+6. Coloquemos otro nombre en vez de `Carlos` por `Delphine` en 
+**APITest.feature**.
+7. Podemos correr desde **Runner.java** y vemos el resultado, sin errores.

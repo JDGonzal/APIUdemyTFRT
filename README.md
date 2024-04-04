@@ -601,7 +601,7 @@ Scenario: Validate an element exist in the response.
   }
 ```
 >[!TIP]  
-> Tambien importamos `import static org.junit.Assert.assertTrue;` en
+> También importamos `import static org.junit.Assert.assertTrue;` en
 > **APISteps.java**.
 
 3. Podemos mejorar el `assertTrue` poniendo un mensaje si hay un error
@@ -617,3 +617,25 @@ por esta otra `Then I validate there is a username: Carlos in the response at /u
 6. Coloquemos otro nombre en vez de `Carlos` por `Delphine` en 
 **APITest.feature**.
 7. Podemos correr desde **Runner.java** y vemos el resultado, sin errores.
+
+## Paso 30. Obtener un valor específico anidado en el Response.
+1. Añadimos a **APITest.feature** un nuevo `Scenario` y movemos el tag a 
+este nuevo:
+```feature
+@API
+Scenario: Validate a value nested within the response
+  Given I send a GET request to the https://jsonplaceholder.typicode.com URI
+  Then I validate there is a street: Kattie Turnpike in the response at /users endpoint
+```
+2. Podemos correr desde **Runner.java** y vemos el resultado con error:  
+`java.lang.AssertionError: The street with value:Kattie Turnpike was not found.`
+>[!TIP]  
+> Hice una prueba cambiando el simple `street` de **APITest.feature** 
+>por uno mas complejo como `address.street` y funcionó 😃.
+
+>[!NOTE]  
+> La solución propuesta por el instructor no es muy "prolija" (como suele 
+>decir él) yes cambiar en **APISteps.java** esto: 
+>`List<String> jsonResponse = response.jsonPath().getList(key);` por esto
+>`String jsonResponse = response.jsonPath().getString("address.street");`.  
+> Prefiero la solución de solo cambiar el dato en **APITest.feature** .

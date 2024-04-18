@@ -522,7 +522,7 @@ sin crear la instancia, se llama _Método de una clase_.
 ## Paso 27. Tipos de HTTP Codes y sus significados.
 >[!NOTE]  
 > Lista de respuestas esperadas :[Respuestas HTTP](https://developer.mozilla.org/es/docs/Web/HTTP/Status).  
->![HTTP Status Codes](images/section04-step27-HTTPStatusCode.jpg).
+>![HTTP Status Codes](images/section04-step_27-HTTPStatusCode.jpg).
 
 ## Paso 28. Validar la cantidad de recursos recibidos en el JSON.
 1. Cambiamos en **APISteps.java** el `@Given` a esto:
@@ -639,3 +639,101 @@ Scenario: Validate a value nested within the response
 >`List<String> jsonResponse = response.jsonPath().getList(key);` por esto
 >`String jsonResponse = response.jsonPath().getString("address.street");`.  
 > Prefiero la solución de solo cambiar el dato en **APITest.feature** .
+
+# Section 5: Aplicando lo aprendido con una API real.
+## Paso 31. Analizando la documentación de una API.
+>[!NOTE]  
+>Este es el sitio q propone el instructor para trabajar: 
+[RapidApi](https://rapidapi.com/).  
+>Pero primero hay q hacer un "Sign in" o "Sign Up":
+>1. Como es la primera vez hacemos un "Sign Up" y en mi caso me autentiqué
+> usando la cuenta de [GitHub](https://github.com/).  
+>![RapidAPI y GitHub](images/section05-step_31-RapidAPI-GitHub.png) 
+>2. Pide datos adicionales, para poder continuar:  
+>![More Options](images/section05-step_31-MoreOptions.png)
+
+## Paso 32. Definiendo los scenarios para testear la API en Cucumber
+>[!IMPORTANT]  
+> la URI propuesta por el instructor [Brave New Coin](https://rapidapi.com/collection/brave-new-coin-api-collection), ya no existe,
+>entonces cambié a la de [API de Twitter](https://developer.twitter.com/en/docs/twitter-api), ahí tengo mi cuenta básica de twitter.
+>
+>1. Ingresé a [Developer Portal](https://developer.twitter.com/en/portal/dashboard)
+>2. Adicioné un proyecto.
+>3. El Sistema genera una APP.
+>4. Vamos al Proyecto y a al opcion de "Settings", para presionar 
+>[Edit].
+>5. Verificamos que el "Project use" esté en "Doing Academic research".
+>6. Regresando a la APP presionamos el botón [Edit] de abajo, es 
+>decir de "User autentication settings".
+>7. El "App permissions" lo dejamos en "Read and write and Direct message".
+>8. Cambiamos el "Type of App" a "Web App, Automated App or Bot".
+>9. El cuadro de "App Info" , llenar de esta manera:
+>    * "Callback URI": http://127.0.0.1
+>    * "Website URL":
+>https://developer.twitter.com/en/portal/projects/1648328711593181184/apps/26952311/settings
+>10. Presione el botón "Save".
+>11. Ahora bien el la parte superior, al centro dale click al 
+>tabulador "Key and tokens".
+>12. Anota cada clave y si no la sabes o no la tienes, dale clik en "Generate" o "Regenerate".
+> * **Consumer Keys**:
+>   * API Key
+>   * API Key Secret
+> * **Authentication Tokens**:
+>   * Bearer Token 
+>   * Access Token
+>   * Access Token Secret
+> * **OAuth 2.0 Client ID and Client Secret**:
+>   * Client ID
+>   * Client Secret
+>13. En "Products" al centro a la izquierda, lo expandes y debes
+> tener como mínimo el "X API v2".
+>14. Estando en el lado o tabulador "Free", mira a q tienes permiso:
+> * Apps: 1 environment.
+> * Posts: Posts - post up to 1500 Posts per month.
+> * Cost: free.
+> * **Free features**:
+>   * [Manage Tweets](https://developer.twitter.com/en/docs/twitter-api/tweets/manage-tweets/introduction).
+>     * POST /2/tweets 
+>     * DELETE /2/tweets/:id
+>   * [Users lookup](https://developer.twitter.com/en/docs/twitter-api/users/lookup/introduction).
+>     * GET /2/users/me
+>15. Este es un link para **Exportar** y usar en Postman llamada
+>[Twtter API v2](https://www.postman.com/twitter/workspace/twitter-s-public-workspace/collection/9956214-784efcda-ed4c-4491-a4c0-a26470a67400?ctx=documentation).
+>16. Este es un reposiotrio [Twitter-API-v2-sample-code](https://github.com/twitterdev/Twitter-API-v2-sample-code)
+>para probar con varias herramientas:
+> * Java
+> * Node.js
+> * Python
+> * R
+> * Ruby
+>17. Acá un ejemplo paso a paso para los permisos **OAuth 2.0**:
+>[OAuth 2.0 Tokens and Twitter API: Everything You Need to Know](https://medium.com/@abhiruchichaudhari/oauth-2-0-tokens-and-twitter-api-everything-you-need-to-know-bddaf9a7f120).
+
+1. Creamos el archivo **TwitterAPIv2.feature** en 
+"src/test/resources/features".
+2. El ponemos el tag `@xAPIv2` en **TwitterAPIv2.feature**.
+3. Hacemos el cambio de `tags` en **Runner.java**.
+4. Escribimos el título: `Feature: Twitter API v2 some scenarios.`.
+5. Se establece una regla: 
+`Rule: When I send POST request to the endpoint, I receive a token I can use to make further authenticated calls.`
+6. Añadimos el primer `Scenario` con lo requerido:
+```feature
+    Scenario: As a user, I can retrieve a Token when making a valid POST request
+      Given I have a valid API Key for the https://api.twitter.com URI
+      When I send a POST request with the value body to the /oauth2/token endpoint
+      Then I can validate I receive a valid token in the response
+``` 
+7. Siguiente `Scenario` puede ser negativo:
+```feature
+    Scenario: As a user, I use and invalid API Key, I get an HTTP Code Status 403
+      Given I have an invalid API Key for the https://api.twitter.com URI
+      When I send a POST request with the value body to the /oauth2/token endpoint
+      Then I receive an HTTP Code Status 403
+```
+8. Otro `Scenario` negativo podría ser:
+```feature
+    Scenario: As a user, when I send the POST request witout "grant_type", I get an HTTP Code Status 400
+      Given I have an invalid API Key for the https://api.twitter.com URI
+      When I send a POST request witout "grant_type" in it's body
+      Then I receive an HTTP Code Status 400
+```

@@ -737,3 +737,83 @@ Scenario: Validate a value nested within the response
       When I send a POST request witout "grant_type" in it's body
       Then I receive an HTTP Code Status 400
 ```
+
+## Paso 33. Definiendo los steps.
+1. Crear el archivo **TwitterAPIv2Steps.java** en la ruta 
+"src\test\java\steps".
+2. Importamos estos elementos requeridos:
+```java
+import io.cucumber.java.en.*;
+import io.restassured.http.ContentType;
+import io.restassured.response.Response;
+import io.restassured.response.ValidatableResponse;
+import io.restassured.specification.RequestSpecification;
+```
+3. Definimos una cuantas variables:
+```java
+  private static RequestSpecification request;
+  private Response response;
+  private ValidatableResponse json;
+```
+4. Creamos dos variables en el sistema basados en los datos de 
+_Twiter API v2_, para `consumer_key` y `consumer_secret`, los nombres
+que voy a usar serán `TwitterAPIv2consumer_key` y
+`TwitterAPIv2consumer_secret`.
+Pasos para crear las "Variables de Ambiente":
+    1. Dar el **New** en la parte de abajo (System variables).
+    2. Escribir la Variable y el Valor.
+    3. Dar **OK**.
+    4. Dar el **OK** final de **`Environment Variables`**.
+    5. Y Dar el último **OK** de la ventana de **`System Properties`**.  
+
+5. Cerramos y reabrimos el "Visual Studio Code", y dependiendo de la terminal escribimos el comando:  
+    >`Powershell`
+    ```powhershell
+    $env:TwitterAPIv2consumer_key
+    $env:TwitterAPIv2consumer_secret
+    ```
+    >`Command Prompt`
+    ```dos
+    echo %TwitterAPIv2consumer_key%
+    echo %TwitterAPIv2consumer_secret%
+    ```
+    >`bash`
+    ```bash
+    echo $TwitterAPIv2consumer_key
+    echo $TwitterAPIv2consumer_secret
+    ``` 
+6. Utilizamos estas variable en el paso de `@Given`:
+```java
+  @Given("^I have a valid API Key for the (.+) URI$")
+  public void iSetTheRequestPArams(String URI) {
+    String username = System.getenv("TwitterAPIv2consumer_key");
+    String password = System.getenv("TwitterAPIv2consumer_secret");
+    request = given().relaxedHTTPSValidation().auth().preemptive()
+        .basic(username, password) // Variables de Ambiente
+        .contentType(ContentType.URLENC) // Toca usa este Formato
+        .baseUri(URI) // La ruta del URI
+        .log().all(); // loguea todo el movimiento `DEBUG CONSOLE`
+  }
+```
+7. Creamos el paso del `@When`:
+```java
+  @When("^I send a POST request with the value body to the (.+) endpoint$")
+  public void sendPOSTResquest(String endpoint) {
+    // String requestBody = "{\n" + " \"grant_type\": \"client_credentials\"\n" +
+    // "}";
+    response = request.when()
+        .params("grant_type", "client_credentials")
+        // .body(requestBody) // No funciona en el body
+        .post(endpoint).prettyPeek();
+  }
+```
+8. Y el paso del `@Then`:
+```java
+  @Then("^I can validate I receive a valid token in the response$")
+  public void valiadateTheToken() {
+    response.then().statusCode(200);
+  }
+```
+9. Podemos correr desde **Runner.java** y vemos el resultado y solo
+hay un `Scenario` válido, también podemos mira el contenido de 
+`DEBUG CONSOLE`.

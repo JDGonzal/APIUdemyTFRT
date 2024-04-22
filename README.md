@@ -817,3 +817,84 @@ Pasos para crear las "Variables de Ambiente":
 9. Podemos correr desde **Runner.java** y vemos el resultado y solo
 hay un `Scenario` válido, también podemos mira el contenido de 
 `DEBUG CONSOLE`.
+
+## Paso 34. Pasando parámetros en nuestra llamada.
+>[!NOTE]  
+> Una breve explicación de reemplazar el `body` por un archivo
+>Externo de extensión JSON y hacer uso de parámetros en el 
+>**TwitterAPIv2.feature** para llamarlo, pero como para nuestro
+>ejercicio no usamos el `body`, sino `parameters`, este no aplica.
+
+# Section 6: Trabajando con autenticación Servidor-Cliente.
+
+## Paso 35. El Keystore y el Truststore en Java.
+>[!NOTE]  
+>El **KeyStore** es un archivo local, donde están las `keys` que 
+>generamos como cliente desde nuestra máquina, que luego presentaremos
+>a un servidor cuando este requiera q las presentemos, pues puede que
+>adicional a una autenticación, tengamos una `key`. Esto se presenta
+>como una autenticación mutua o cruzada, el servidor presenta su 
+>certificado en el que confías y a su vez el servidor te pide un 
+>certificado o una `key`.  
+>El **TrueStore** es que si el ceriticado o la `key` es válida.
+
+>[!TIP]  
+>El instructor nos manda a ejecutar este comando
+>```bash
+>openssl s_client -showcerts -connect www.linkedin.com:443
+>```
+>Y obtenemos todo lo relacionado con este sitio en cuanto a Certificado
+
+>[!NOTE]  
+>Explican q `relaxedHTTPSValidation` es utilizado para q se confíe en
+>el servidor sin necesidad de un certificado.  
+>El **Keystore** debe estar en la máquina 
+
+## Paso 36. Rest Assured: Autenticación con mutual TLS contra servidor y cliente.
+
+>[!NOTE]  
+> ### Rest Assured: Autenticación con mutual TLS contra servidor y cliente.
+>TLS (Transport Layer Security) es un método usado por un cliente, como una aplicación bajo prueba, para comunicarse con un servidor web.  
+>En una llamada con TLS, un cliente dice "hola" a un servidor. El servidor responde y manda en la respuesta un certificado para probar que es él. El cliente verifica el certificado y la comunicación sigue feliz.  
+>La mayoría de las interacciones con un servidor web son así. Pero cuando nos encontramos con Mutual TLS, las cosas se ponen un poco peludas. En este caso hay un paso adicional en el que el cliente tiene que identificarse con el servidor mandando su certificado.  
+>Como vimos en la anterior clase, cuando usamos un cliente hecho con Java (como el caso con Rest Assured), hay un archivo especial llamado TrustStore en el que los certificados de servidor de confianza se guardan. El cliente usa este archivo para verificar que el certificado enviado por el servidor está dentro de los aceptados. Por defecto, este truststore lo encuentran en un archivo llamado cacerts. Y lo van a encontrar en la carpeta security dentro del home de JDK/jdk/jre/lib.  
+>Cuando corremos nuestra aplicación de test, podemos apuntar a diferentes truststore que incluyamos en nuestro proyecto mismo y así manejar qué servidores son los de confianza.    
+>Para generar este truststore, hacemos lo siguiente:
+>Desde gitbash (o la terminal de MacOS), ejecutamos el siguiente comando:
+>```bash
+>openssl s_client -connect[server]:[port] -showcerts
+>```
+>Esto va a devolver un texto mostrando todos los certificados que el servidor manda al cliente.  
+>Dentro de este texto, cada certificado está codificado dentro de las líneas -----BEGIN CERTIFICATE------ y -----END CERTIFICATE-------.  
+>Copiamos el texto para cada certificado (incluyendo el BEGIN y END) en un archivo con extensión .pem. Creamos un archivo por cada certificado, atentos a esto!  
+>De nuevo, desde la terminal, usamos keytool para generar el nuevo truststore con una extensión .jks: keytool -importcert -file -archivo1.pem -keystore truststore.jks -alias "certificado1".  
+>Hacemos esto para cada archivo .pem que creamos antes.  
+>Una vez todos los certificados fueron importados, podemos verificar que efectivamente está todo en orden haciendo: keytool -list -v -keystore truststore.jks .  
+>Ahora bien, para hacer Mutual TLS necesitamos también identificar a nuestro cliente para que el servidor lo acepte. Para esto vamos a crear otra pieza fundamental llamada Keystore, que es enviado al servidor, junto a una private key que genera el certificado del cliente para ser verificado.  
+>El certificado de cliente pueden pedirlo al equipo de desarrollo y con él vamos a hacer el request añadiéndolo con todo lo que mandamos.  
+>El certificado y la private key la podemos separar (es recomendable mantener la private key segura y...bueno, privada, aunque hablemos de ambientes de prueba). Para generar el keystore local hacemos lo siguiente:  
+>Desde gitbash ejecutamos el siguiente comando
+>```bash
+>wimpty openssl pkcs12 -export -inkey(archivoConLaKey).key -in (certificado).cer -name (alias) -out keystore.pkcs12
+>```
+>Pueden verificar que el keystore desde la línea de comando usando:
+>```bash
+>keytool -list -v -keystore keystore.pkcs12
+>```
+>Yo prefiero usar la misma clave para la truststore y la keystore, pero pueden usar diferentes passwords para cada una.  
+>Una vez tienen el truststore.jks y el keystore.pkcs12 pueden sumarlos a la carpeta que tengan con recursos, testdata o configuración en sus proyectos.  
+>Para que RestAssured use estos dos mágicos archivos que creamos, tenemos que definir esto en la configuración de RestAssured:
+>```java
+>SSLConfig config = new SSLConfig().with().trustStore(trustStorePath, trustStorePassword).and().keyStore(keyStorePath, keyStorePassword)
+>RestAssured.config = RestAssured.config().sslConfig(config)
+>```
+>Si quieren divertirse con una cantidad de output BESTIAL y ver qué pasa detrás de escenas en la comunicación entre servidor y cliente, usen la opción -Djavax.net.debug=all en la ejecución.
+>
+>#### Conclusión
+>Este tutorial, si bien es uno de los menos bonitos, es uno de los que más va a servirles en caso que se encuentren con este caso. En internet es MUY difícil dar con una solución a este problema y a mí me llevó un buen tiempo dar en el clavo.
+>
+>Algo importante, es que van a notar que las requests no llegan a un buen puerto y a veces van a recibir un error del tipo:
+>```diff
+>-sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
+>```
+>Recomiendo siempre validar esto con los devs para estar seguros que es por un problema de autenticación y seguridad con los certificados! Una vez recibida la luz verde, sigan este tutorial al pie de la letra y van a estar realizando requests sin problemas en menos de lo que canta un gallo!

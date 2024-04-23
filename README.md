@@ -947,7 +947,7 @@ test{
 >[!NOTE]  
 >Sugiere el uso de `groovy` en vez de `java` por ser mas resumido y 
 >mejor manejo de estructuras, como listas, o el `rest-assured`, es
->mas sencillo o potente con el uso de `groovy`  
+>mas sencillo o potente con el uso de `groovy`.  
 >En palabras del instructor "`groovy`es un sabor de `java`"
 
 1. A modo de ejemplo creamos la carpeta "groovy" dentro de 
@@ -958,7 +958,99 @@ test{
   print 'Esto es un lindo mensaje.'
 }
 ```
-[!CAUTION]  
+>[!CAUTION]  
 >3. En el Ejemplo del instructor, solo da click derecho en el archivo
 >de `groovy` y aparece la opción para ejecutar o correr, acá no me 
->aparece, eperemos la calse siguiente para ver si muestra la solución.
+>aparece, esperemos la clase siguiente para ver si muestra la solución.
+
+## Paso 40. TestNG: Creando nuestro segundo Framework para API Automation
+1. Hacemos unos ajustes en el **build.gradle**, empezando con los
+`plugins`:
+```gradle
+plugins {
+    id 'groovy'
+    id 'java'
+}
+```
+2. La primer dependencia de [Groovy All Codehaus](https://mvnrepository.com/artifact/org.codehaus.groovy/groovy-all), cambiando la `implementation`
+por el `compile`en la forma (Short).
+3. Otra dependencia es [REST Assured](https://mvnrepository.com/artifact/org.apache.groovy/groovy-all) tambien en formato (SHORT).
+4. Por último el [TestNG](https://mvnrepository.com/artifact/org.testng/testng), este en el formato de `Gradle` normal, cambiendo el
+`testImplementation` por `testCompile`.
+```gradle
+dependencies{
+    // https://mvnrepository.com/artifact/org.codehaus.groovy/groovy-all
+    compile 'org.codehaus.groovy:groovy-all:3.0.21'
+    // https://mvnrepository.com/artifact/io.rest-assured/rest-assured
+    testImplementation 'io.rest-assured:rest-assured:5.4.0'
+    // https://mvnrepository.com/artifact/org.testng/testng
+    testCompile group: 'org.testng', name: 'testng', version: '7.10.1'
+}
+```
+5. Se añade a **build.gradle** una opción de `test`:
+```gradle
+test {
+    useTestNG(){
+        testLogging.showStandardStreams = true
+        useDefaultListeners = true
+        reports.html.enabled = false
+        parallel="tests"
+    }
+}
+```
+>[!CAUTION]  
+>Ejecuté el comando en `TERMINAL` de `gradle clean`, pero obtengo un
+>error:
+>```diff
+>-FAILURE: Build failed with an exception.
+>* Where:
+>Build file '...\build.gradle' line: 18
+>* What went wrong:
+>A problem occurred evaluating root project 'APIUdemy'.
+> Could not find method compile() for arguments [org.codehaus.groovy:groovy-all:3.0.21] on object of type org.gradle.api.internal.artifacts.dsl.dependencies.DefaultDependencyHandler.
+>```
+>Esta el la propuesta del Instructor  
+>![gradle.build](images/section07-step_40-build_gradle.png)
+
+6. Realizo esto cambios en `dependencies` de esta manera:
+```gradle
+dependencies{
+    // https://mvnrepository.com/artifact/org.codehaus.groovy/groovy-all
+    // compile 'org.codehaus.groovy:groovy-all:3.0.21'
+    implementation("org.codehaus.groovy:groovy-all:3.0.4") {
+        exclude(group: 'org.codehaus.groovy', module: 'groovy-testng')
+    }
+    // https://mvnrepository.com/artifact/io.rest-assured/rest-assured
+    testImplementation 'io.rest-assured:rest-assured:4.3.1'
+    // https://mvnrepository.com/artifact/org.testng/testng
+    testImplementation group: 'org.testng', name: 'testng', version: '7.10.1'
+}
+```
+7. Cambios en `test` así:
+```gradle
+test {
+    useTestNG(){
+        testLogging.showStandardStreams = true
+        useDefaultListeners = true
+        reports {   
+            html {
+                    enabled false   
+            }   
+        }
+        parallel="tests"
+    }
+}
+```
+8. Ahora si volví a correr el `gradle clean` en la `TERMINAL` y
+ejecutó sin problemas:
+```diff
++BUILD SUCCESSFUL in 2s
+1 actionable task: 1 executed
+```
+9. Borramos la carpeta "src/test/java" o en mi caso la moví a la
+carpeta `.bak`.
+10. Ejecuto el `gradle build` en la `TERMINAL` y obtengo:
+```diff
++BUILD SUCCESSFUL in 5s
+3 actionable tasks: 3 executed
+```

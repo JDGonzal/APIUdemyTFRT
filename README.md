@@ -898,3 +898,35 @@ hay un `Scenario` válido, también podemos mira el contenido de
 >-sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
 >```
 >Recomiendo siempre validar esto con los devs para estar seguros que es por un problema de autenticación y seguridad con los certificados! Una vez recibida la luz verde, sigan este tutorial al pie de la letra y van a estar realizando requests sin problemas en menos de lo que canta un gallo!
+
+# Section 7: API Automation con TestNG: Alternativa a Cucumber
+## Paso 37. TestNG: Qué es? Qué librerías necesito?
+>[!NOTE]  
+>Se sugiere visitar la página [TestNG Documentation](https://testng.org/).
+1. En el archivo **build.gradle**, añado lo siguiente en dependencias,
+ pero lo dejo comentado:
+```gradle
+    // El siguiente lo tiene el instructor pero es una repetición del primero en formato (Short)
+    // https://mvnrepository.com/artifact/io.rest-assured/rest-assured
+    // testImplementation 'io.rest-assured:rest-assured:3.3.0'
+```
+2. En **build.gradle** , pongo una linea al final de `test`:
+```gradle
+test{
+    systemProperty "cucumber.options", System.getProperty("cucumber.options")
+}
+```
+3. Creo la carpeta `tests`dentro de "src/test/java".
+4. Creamos el archivo **TestNGEjemplo.java** dentro de la carpeta
+"src/test/java/tests".
+5. Añado en **build.gradle** , otra dependencia llamada 
+[TestNG](https://mvnrepository.com/artifact/org.testng/testng)
+
+>[!TIP]  
+> Muchas veces añadir dependencias requiere que se ejecute la limpieza del 
+> ambiente de dos maneras:
+> * Presionar las teclas [Ctrl][Shift][P], y seleccionar
+> `Java: Clean Java Language Server Workspace`, o
+> * En el Menú inferior izquierdo, seleccionar `JAVA PROJECT`, 
+>luego los puntos suspensivos y ahí está `Clean Workspace`.
+

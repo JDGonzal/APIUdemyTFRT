@@ -1,43 +1,39 @@
 plugins {
+    id 'groovy'
     id 'java'
 }
 
-group 'TheFreeRangeTester'
-version '1.0.SNAPSHOT'
+group 'RestAssured-Groovy'
+version '1.0-SNAPSHOT'
 
 sourceCompatibility = 1.11
 
 repositories {
     // Use Maven Central for resolving dependencies.
-    mavenCentral()
+    mavenCentral() 
 }
 
-dependencies {
-    // https://mvnrepository.com/artifact/io.rest-assured/rest-assured
-    testImplementation group: 'io.rest-assured', name: 'rest-assured', version: '5.4.0'
-    // Se requiere una versión "Hermana" de junit igual q la version de cucumber
-    // https://mvnrepository.com/artifact/io.cucumber/cucumber-java
-    implementation group: 'io.cucumber', name: 'cucumber-java', version: '7.16.1'
-    // https://mvnrepository.com/artifact/io.cucumber/cucumber-junit
-    testImplementation group: 'io.cucumber', name: 'cucumber-junit', version: '7.16.1'
-    // https://mvnrepository.com/artifact/tech.grasshopper/extentreports-cucumber7-adapter
-    implementation group: 'tech.grasshopper', name: 'extentreports-cucumber7-adapter', version: '1.14.0'
-    // https://mvnrepository.com/artifact/org.json/json
-    implementation group: 'org.json', name: 'json', version: '20240303'
-    // El siguiente lo tiene el instructor pero es una repetición del primero en formato (Short)
-    // https://mvnrepository.com/artifact/io.rest-assured/rest-assured
-    // testImplementation 'io.rest-assured:rest-assured:3.3.0'
-
+dependencies{
     // https://mvnrepository.com/artifact/org.codehaus.groovy/groovy-all
-    // https://mvnrepository.com/artifact/org.junit/junit-bom
-    testImplementation (platform('org.junit:junit-bom:5.10.2'))
-    // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter
-    testImplementation ('org.junit.jupiter:junit-jupiter')
+    // compile 'org.codehaus.groovy:groovy-all:3.0.21'
+    implementation("org.codehaus.groovy:groovy-all:3.0.4") {
+        exclude(group: 'org.codehaus.groovy', module: 'groovy-testng')
+    }
+    // https://mvnrepository.com/artifact/io.rest-assured/rest-assured
+    testImplementation 'io.rest-assured:rest-assured:4.3.1'
     // https://mvnrepository.com/artifact/org.testng/testng
     testImplementation group: 'org.testng', name: 'testng', version: '7.10.1'
-
 }
 
-test{
-    systemProperty "cucumber.options", System.getProperty("cucumber.options")
+test {
+    useTestNG(){
+        testLogging.showStandardStreams = true
+        useDefaultListeners = true
+        reports {   
+            html {
+                    enabled false   
+            }   
+        }
+        parallel="tests"
+    }
 }

@@ -930,3 +930,35 @@ test{
 > * En el Menú inferior izquierdo, seleccionar `JAVA PROJECT`, 
 >luego los puntos suspensivos y ahí está `Clean Workspace`.
 
+## Paso 38. ¿Por qué y cuándo usar TestNG en lugar de Cucumber?
+>[!NOTE]  
+>**Cucumber**, no es una herramienta de automation, es mas bien de
+>colaboración. El objetivo de **Cucumber** y el lenguaje `Gherkin`
+>es q se pueda entender a nivel negocio.  Q escenarios vamos a validar
+>para saber q los requerimientos estén cumplidos.
+>
+>En cambio **TestNG**, es mas simple sin tantas capas de por medio.
+
+## Paso 39. Groovy: ¿Qué es y por qué usarlo?
+>[!TIP]  
+>Revisemos q si tengamos la extensión llamada `code-groovy` de 
+`Marlon Franca`.
+
+>[!NOTE]  
+>Sugiere el uso de `groovy` en vez de `java` por ser mas resumido y 
+>mejor manejo de estructuras, como listas, o el `rest-assured`, es
+>mas sencillo o potente con el uso de `groovy`  
+>En palabras del instructor "`groovy`es un sabor de `java`"
+
+1. A modo de ejemplo creamos la carpeta "groovy" dentro de 
+"src/test".
+2. Allí simplemente creamos el archivo **Ejemplos.groovy**, con esto:
+```groovy
+3.times{
+  print 'Esto es un lindo mensaje.'
+}
+```
+[!CAUTION]  
+>3. En el Ejemplo del instructor, solo da click derecho en el archivo
+>de `groovy` y aparece la opción para ejecutar o correr, acá no me 
+>aparece, eperemos la calse siguiente para ver si muestra la solución.

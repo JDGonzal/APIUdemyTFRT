@@ -1054,3 +1054,29 @@ carpeta `.bak`.
 +BUILD SUCCESSFUL in 5s
 3 actionable tasks: 3 executed
 ```
+
+## Paso 41. Presentación de una API que vamos a testear: QA Library
+1. El sitio q nos propone el instructor está disponible, y es este
+[HerokuApp/books](http://qa-library-dev.herokuapp.com/api/books). 
+
+![HerokuApp-books](images/section07-step_41-HerokuApp-Books.png)  
+
+>[!TIP]  
+>Para visualizar en un browser el contenido del API que obtube con el
+> simple `GET`, en forma de _JSON_, tengo instalada la extensión 
+>`JSON Viewer` y la está _pineada_ en la barra de tareas.
+
+2. Visualizo en `Thunder Client`, en la barra del extremo izquierdo de
+_Visual Studio_ o presionando las teclas [Ctrl][Shift][R].
+3. En `THUNDER CLIENT`, selecciono `Collections` y creo una nueva
+llamada `HerokuApp-books`, dando click en el ménu de hambuerguesa o
+las tres barras y seleccionando `New Collection`.
+4. Añado mi primer _HTTP request_, justo en los tres puntos al frente
+de `HerokuApp-books` y `New Request`, obtengo algo similar a esto:
+
+![ThunderClient-GET-Books](images/section07-step_41-ThunderClient-GET-Books.png)
+
+5. Añado otro _HTTP request_ , de tipo `GET` apuntando a esta ruta
+[HerokuApp/articles](http://qa-library-dev.herokuapp.com/api/articles).
+
+![ThunderClient-GET-Articles](images/section07-step_41-ThunderClient-GET-Articles.png)

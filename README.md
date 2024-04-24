@@ -1080,3 +1080,34 @@ de `HerokuApp-books` y `New Request`, obtengo algo similar a esto:
 [HerokuApp/articles](http://qa-library-dev.herokuapp.com/api/articles).
 
 ![ThunderClient-GET-Articles](images/section07-step_41-ThunderClient-GET-Articles.png)
+
+## Paso 42. Creación de una Base Page en API Testing
+1. Creamos el archivo **Base.groovy** en la carpeta "src/test/groovy",
+con la siguiente información
+```groovy
+import io.restassured. RestAssured
+import io.restassured.builder.RequestSpecBuilder
+import io.restassured.http.ContentType
+import io.restassured.specification.RequestSpecification
+import org.testng.annotations.BeforeClass
+
+class Base {
+  @BeforeClass
+  public static void setupRestAssured() {
+    RestAssured.baseURI = "http://qa-library-dev.herokuapp.com"
+    RestAssured.basePath = "/api/";
+    RequestSpecification requestSpecification = new RequestSpecBuilder().
+      addHeader("Content-Type", ContentType.JSON.toString()).
+      addHeader("Accept", ContentType.JSON.toString()).build()
+    RestAssured.requestSpecification = requestSpecification
+  }
+}
+```
+>[!TIP]  
+> En `groovy` no son necesarios los punto y coma (`;`).
+
+2. Ejecuto el `gradle build` en la `TERMINAL` y obtengo:
+```diff
++BUILD SUCCESSFUL in 8s
+3 actionable tasks: 1 executed, 2 up-to-date
+```

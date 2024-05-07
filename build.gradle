@@ -36,7 +36,7 @@ test {
         useDefaultListeners = true
         reports {   
             html {
-                    enabled false   
+                    enabled true   
             }   
         }
         parallel="tests"

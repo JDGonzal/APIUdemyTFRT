@@ -1190,7 +1190,7 @@ import static io.restassured.RestAssured.*
   }
 ```
 11. Añadimos el archivo **book.json** en "src/test/resources":
-![](images/section07-step_43-book_json.png)
+![book.json](images/section07-step_43-book_json.png)
 
 12. Otro `@Test` en **Books.groovy**, de forma negativa
 ```groovy
@@ -1211,3 +1211,22 @@ import static io.restassured.RestAssured.*
 >[!IMPORTANT]  
 >En la siguiente paso se va a mostrar la tarea de `gradle` que va a
 >ejecutar esta prueba.
+
+## Paso 44. Correr TestNG con una tarea de Gradle desde la CLI (terminal)
+
+1. Hacemos cambios en **build.gradle**:  
+![build.gradle](images/section07-step_44-build_gradle.png)
+
+>[!TIP]  
+>En mi ambiente se hicieron algunos cambios para q funcionara
+
+2. Se ejecuta en la `TERMINAL` el comando `gradle test`
+
+>[!CAUTION]  
+>En mi caso no se genera el reporte 🤐
+
+3. Habilité el reporte con `true` en el **build.gradle** y aparece el reporte e incluso me muestra ya un error:  
+![report.html](images/section07-step_44-report_html.png)
+
+>[!NOTE]  
+>Tocaría analizar y corregir las pruebas, pero eso sería algo a futuro

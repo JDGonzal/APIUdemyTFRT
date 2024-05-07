@@ -1111,3 +1111,103 @@ class Base {
 +BUILD SUCCESSFUL in 8s
 3 actionable tasks: 1 executed, 2 up-to-date
 ```
+
+## Paso 43. Clase groovy para Tests con TestNG: El endpoint para Books y sus pruebas.
+1. Creamos el archivo **Books.groovy** en el directorio
+ "src/test/groovy".
+2. En el archivo **Books.groovy** ponemos la clase por defecto:
+```groovy
+class Books{
+
+}
+```
+3. Heredamos de `Base`, la clase dentro de **Books.groovy**:
+```groovy
+class Books extends Base {
+
+}
+```
+4. Creamos un `@Test`, con lo básico:
+```groovy
+  @Test
+  void getBookList() {
+    Response response = get('/books')
+
+    ArrayList<String> allBooks = response.path('data:title')
+    Assert.assertTrue(allBooks.size() >= 1, 'No books returned')
+  }
+```
+5. Importamos las librerías necesarias en el archivo **Books.groovy**:
+```groovy
+import io.restassured.response.Response
+import org.testng.Assert
+import org.testng.annotations.Test
+
+import static io.restassured.RestAssured.*
+```
+6. Creamos otro test para validar el `Schema`:
+```groovy
+  @Test
+  void booksShemaIsValid() {
+    get('/books').then().assertThat()
+    .body(matchesJsonSchemaInClassPath('booksSchema.json'))
+  }
+```
+7. Debemos añadir otra librería al **build.gradle** de este sitio
+[Rest Assured - JSON Schema Validator](https://mvnrepository.com/artifact/io.rest-assured/json-schema-validator)
+
+>[!TIP]  
+> Muchas veces añadir dependencias requiere que se ejecute la limpieza
+> del ambiente, pero como estamos en `groovy`:  
+> En la `TERMINAL` ejecutar `gradle clean` y luego `gradle build`,
+> para ambos la respuesta debe ser exitosa o `SUCCESSFUL`.
+
+8. En el archivo **Books.groovy**, importamos la nueva librería:
+`import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClassPath`.
+9. En la carpeta "src/test/resources" creamos el archivo
+**booksSchema.json**:  
+![BooksSchema.json 1](images/section07-step_43-BooksSchema_json1.png)
+![BooksSchema.json 2](images/section07-step_43-BooksSchema_json2.png)
+
+10. Hacemos otro `@Test` en **Books.groovy**:
+```groovy
+  @Test
+  void createAndDeleteBook() {
+    File bookFile = new File(getClass().getResource('/book.json').toUri())
+    Response createResponse = given().body(bookFile).when().post('/books')
+    String responseID = createResponse.jsonPath().getString('post.book_id')
+
+    Assert.assertEquals(createResponse.getStatusCode(), 201)
+
+    Response deleteResponse = given().body(
+      '{\n' +
+      '\t\"book_id\": '+ responseID +'\n'+
+      '}').when().delete('/books')
+
+    Assert.assertEquals(deleteResponse.getStatusCode(), 200)
+    Assert.assertEquals(deleteResponse.jsonPath().getString('message'),
+    'Book sucessfully deleted')
+  }
+```
+11. Añadimos el archivo **book.json** en "src/test/resources":
+![](images/section07-step_43-book_json.png)
+
+12. Otro `@Test` en **Books.groovy**, de forma negativa
+```groovy
+  @Test
+  void deleteNonExistentBook_FailMessage() {
+    String nonExistentBookId = '456123'
+
+    Response deleteResponse = given().body(
+      '{\n' +
+      '\t\"book_id\": '+ nonExistentBookId +'\n'+
+      '}').when().delete('/books')
+
+    Assert.assertEquals(deleteResponse.getStatusCode(), 500)
+    Assert.assertEquals(deleteResponse.jsonPath().getString('error'),
+    'Unable to find book id: ' + nonExistentBookId)
+  }
+```
+>[!IMPORTANT]  
+>En la siguiente paso se va a mostrar la tarea de `gradle` que va a
+>ejecutar esta prueba.

@@ -15,13 +15,18 @@ repositories {
 
 dependencies{
     // https://mvnrepository.com/artifact/org.codehaus.groovy/groovy-all
-    // compile 'org.codehaus.groovy:groovy-all:3.0.21'
+    // compile 'org.codehaus.groovy:groovy-all:3.0.2'
     implementation("org.codehaus.groovy:groovy-all:3.0.4") {
         exclude(group: 'org.codehaus.groovy', module: 'groovy-testng')
     }
     // https://mvnrepository.com/artifact/io.rest-assured/rest-assured
     testImplementation 'io.rest-assured:rest-assured:4.3.1'
+    // https://mvnrepository.com/artifact/io.rest-assured/json-schema-validator
+    // compile 'io.rest-assured:json-schema-validator:3.0.3'
+    implementation 'io.rest-assured:json-schema-validator:5.4.0'
+
     // https://mvnrepository.com/artifact/org.testng/testng
+    // testCompile group: 'org.testng', name: 'testng', version: '7.3.0'
     testImplementation group: 'org.testng', name: 'testng', version: '7.10.1'
 }
 

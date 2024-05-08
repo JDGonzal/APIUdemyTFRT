@@ -1230,3 +1230,25 @@ import static io.restassured.RestAssured.*
 
 >[!NOTE]  
 >Tocaría analizar y corregir las pruebas, pero eso sería algo a futuro
+
+## Paso 45. Test Suites en TestNG
+1. Añado en **build.gradle** otra linea en la zona de `test`, asi
+`includeGroups 'first'`.
+2. Añado en **Books.groovy** a modo de `tag`, esto:  
+`@Test(groups="first")`, al menos al primer test.
+3. En `TERMINAL` ejecuto : `gradle test` y reviso el reporte  
+![index.html](images/section07-step_45-report_html.png)  
+Solo aparece al que le asigne el `group`.
+4. Dado este menseje de error:
+```diff
+-Gradle Test Executor 12 STANDARD_ERROR
+    SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+    SLF4J: Defaulting to no-operation (NOP) logger implementation
+    SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+```
+Añadí en **build.gradle** esta dependencia 
+[SLF4J Simple Provider](https://mvnrepository.com/artifact/org.slf4j/slf4j-simple)
+
+>[!CAUTION]  
+>Se hicieron varios cambios se añadió otra dependencia, se obtuvieron
+>logs, pero sigue apareciendo error en la ejecución.

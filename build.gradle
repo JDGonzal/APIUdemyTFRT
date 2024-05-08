@@ -28,6 +28,10 @@ dependencies{
     // https://mvnrepository.com/artifact/org.testng/testng
     // testCompile group: 'org.testng', name: 'testng', version: '7.3.0'
     testImplementation group: 'org.testng', name: 'testng', version: '7.10.1'
+
+    // https://mvnrepository.com/artifact/org.slf4j/slf4j-simple
+    testImplementation 'org.slf4j:slf4j-simple:2.0.13'
+
 }
 
 test {
@@ -40,5 +44,6 @@ test {
             }   
         }
         parallel="tests"
+        includeGroups "first"
     }
 }

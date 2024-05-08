@@ -5,18 +5,23 @@ import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInC
 
 import static io.restassured.RestAssured.*
 
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
 class Books extends Base {
 
-  @Test
+  def Logger logger = LoggerFactory.getLogger(getClass())
+
+  @Test(groups='first')
   void getBookList() {
     Response response = get('/books')
-
-    ArrayList<String> allBooks = response.path('data:title')
-    print allBooks
+    logger.info response.path('success').toString()
+    ArrayList<String> allBooks = response.path('data.title')
+    logger.info allBooks.size().toString()
     Assert.assertTrue(allBooks.size() >= 1, 'No books returned')
   }
 
-  @Test
+  @Test(groups='first')
   void booksShemaIsValid() {
     get('/books').then().assertThat()
     .body(matchesJsonSchemaInClassPath('booksSchema.json'))
@@ -37,7 +42,7 @@ class Books extends Base {
 
     Assert.assertEquals(deleteResponse.getStatusCode(), 200)
     Assert.assertEquals(deleteResponse.jsonPath().getString('message'),
-    'Book sucessfully deleted')
+    'Book successfully deleted')
   }
 
   @Test

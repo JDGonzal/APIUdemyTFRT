@@ -1252,3 +1252,26 @@ Añadí en **build.gradle** esta dependencia
 >[!CAUTION]  
 >Se hicieron varios cambios se añadió otra dependencia, se obtuvieron
 >logs, pero sigue apareciendo error en la ejecución.
+
+# Section 8: Mock de data: Cuándo la API todavía no existe.
+
+## Paso 46. Qué es el mocking en integration testing?
+
+>[!NOTE]  
+>Estraremos haciendo 'mocking' de los datos respuesta, sin necesidad de
+>conectarnos a la API
+
+## Paso 47. ¿Qué tecnologías se usan para mocking?
+
+>[!NOTE]  
+>El instructor sugiere utilizar `WireMock`.
+
+## Paso 48. Creando mocks para respuestas de un servicio que aún no existe.
+
+1. Creamos el archivo **MockExample.groovy** en la ruta 
+"src/test/groovy".
+2. Creamos el archivo **evento.json** en la ruta "src/test/resources".
+
+>[!CAUTION]  
+>No se ejecutó como tal la prueba, pues se deconoce lo necesario para
+>las dependencias en **build.gradle**.

@@ -1275,3 +1275,27 @@ Añadí en **build.gradle** esta dependencia
 >[!CAUTION]  
 >No se ejecutó como tal la prueba, pues se deconoce lo necesario para
 >las dependencias en **build.gradle**.
+
+# Section 9: Testear las API: Qué cosas se deben tener en cuenta?
+
+## Paso 49. Sin Page Object Model ¿Dónde pongo los métodos reutilizables?
+
+>[!NOTE]  
+>Page Object Model se puede seguir utlizando con un agrupador como el
+>el archivo **Base.groovy**.
+
+## Paso 50. Estrategias de API Automation: ¿Qué testear y cómo?
+
+>[!NOTE]  
+>Mas de teoría de que tener en cuenta para las pruebas o el testing.
+
+## Paso 51. BDD y API Automation: ¿Por qué y para qué?
+
+>[!NOTE]  
+>Mas de cuando utilizar y cuando no usar.
+
+## Paso 52. ¿Qué mostrar en los reportes de API?
+
+>[!NOTE]  
+> TRuco de reportes con ninguna contextualización.
+
